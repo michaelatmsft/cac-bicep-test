@@ -12,7 +12,8 @@ $contentTypeMapping = @{
     "HuntingQuery"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
     "Parser"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
     "Playbook"=@("Microsoft.Web/connections", "Microsoft.Logic/workflows", "Microsoft.Web/customApis");
-    "Workbook"=@("Microsoft.Insights/workbooks");
+    "Workbook"=@("Microsoft.Graph/applications@v1.0"); # Revert once I am able to adjust the content type environment variable
+    # "BicepResource"=@("Microsoft.Graph/applications@v1.0"); # This would eventually be something such as a Custom detection rule
 }
 $sourceControlId = $Env:sourceControlId 
 $rootDirectory = $Env:rootDirectory
@@ -38,6 +39,7 @@ $sentinelResourcePatterns = @{
     "Parser" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.OperationalInsights/workspaces/$namePattern/savedSearches/$namePattern"
     "Playbook" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.Logic/workflows/$namePattern"
     "Workbook" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.Insights/workbooks/$namePattern"
+    # "BicepTest" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.OperationalInsights/workspaces/$namePattern/providers/Microsoft.SecurityInsights/alertRules/$namePattern"
 }
 
 if ([string]::IsNullOrEmpty($contentTypes)) {
