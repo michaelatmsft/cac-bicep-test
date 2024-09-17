@@ -491,7 +491,13 @@ function Deployment($fullDeploymentFlag, $remoteShaTable, $tree) {
                 Write-Host "[Warning] Skipping deployment for $path. The file doesn't exist."
                 return
             }
-            $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
+
+            if ($path -like "*.bicep") {
+                $templateObject = bicep build $path --stdout | Out-String | ConvertFrom-Json
+            } else {
+                $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
+            }
+
             if (-not (IsValidResourceType $templateObject))
             {
                 Write-Host "[Warning] Skipping deployment for $path. The file contains resources for content that was not selected for deployment. Please add content type to connection if you want this file to be deployed."
