@@ -480,7 +480,7 @@ function Deployment($fullDeploymentFlag, $remoteShaTable, $tree) {
         $totalFailed = 0;
 	      $iterationList = @()
         $global:prioritizedContentFiles | ForEach-Object  { $iterationList += (AbsolutePathWithSlash $_) }
-        Get-ChildItem -Path $Directory -Recurse -Filter *.json -exclude *metadata.json, *.parameters*.json |
+        Get-ChildItem -Path $Directory -Recurse -Filter *.bicep, *.json -exclude *metadata.json, *.parameters*.json, bicepconfig.json |
                         Where-Object { $null -eq ( filterContentFile $_.FullName ) } |
                         Select-Object -Property FullName |
                         ForEach-Object { $iterationList += $_.FullName }
