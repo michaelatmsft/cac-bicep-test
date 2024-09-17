@@ -12,8 +12,8 @@ $contentTypeMapping = @{
     "HuntingQuery"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
     "Parser"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
     "Playbook"=@("Microsoft.Web/connections", "Microsoft.Logic/workflows", "Microsoft.Web/customApis");
-    "Workbook"=@("Microsoft.Graph/applications@v1.0"); # Revert once I am able to adjust the content type environment variable
-    # "BicepResource"=@("Microsoft.Graph/applications@v1.0"); # This would eventually be something such as a Custom detection rule
+    "Workbook"=@("Microsoft.Insights/workbooks");
+    "BicepResource"=@("Microsoft.Graph/applications@v1.0"); # This would eventually be something such as a Custom detection rule
 }
 $sourceControlId = $Env:sourceControlId 
 $rootDirectory = $Env:rootDirectory
