@@ -334,6 +334,7 @@ function IsValidArmResourceType($template) {
         $isAllowedResources = $false
     }
     return $isAllowedResources
+}
 
 function IsValidBicepResourceType($template) {
     return $true # Implement later
