@@ -314,7 +314,15 @@ function IsRetryable($deploymentName) {
     }
 }
 
-function IsValidResourceType($template) {
+function IsValidResourceType($template, $isBicepResource = $false) {
+    if ($isBicepResource) {
+        return IsValidBicepResourceType $template
+    } else {
+        return IsValidArmResourceType $template
+    }
+}
+
+function IsValidArmResourceType($template) {
     try {
         $isAllowedResources = $true
         $template.resources | ForEach-Object { 
@@ -326,6 +334,9 @@ function IsValidResourceType($template) {
         $isAllowedResources = $false
     }
     return $isAllowedResources
+
+function IsValidBicepResourceType($template) {
+    return $true # Implement later
 }
 
 function DoesContainWorkspaceParam($templateObject) {
@@ -494,13 +505,15 @@ function Deployment($fullDeploymentFlag, $remoteShaTable, $tree) {
                 return
             }
 
+            $isBicep = $false
             if ($path -like "*.bicep") {
                 $templateObject = bicep build $path --stdout | Out-String | ConvertFrom-Json
+                $isBicep = $true
             } else {
                 $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
             }
 
-            if (-not (IsValidResourceType $templateObject))
+            if (-not (IsValidResourceType $templateObject $isBicep))
             {
                 Write-Host "[Warning] Skipping deployment for $path. The file contains resources for content that was not selected for deployment. Please add content type to connection if you want this file to be deployed."
                 return
