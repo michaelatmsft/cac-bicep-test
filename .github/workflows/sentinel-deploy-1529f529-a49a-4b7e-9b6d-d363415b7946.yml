@@ -33,6 +33,8 @@ jobs:
       rootDirectory: '${{ github.workspace }}'
       githubAuthToken: ${{ secrets.GITHUB_TOKEN }}
       smartDeployment: 'true'
+    permissions:
+      contents: write
 
     steps:
     - name: Login to Azure (Attempt 1)
@@ -73,7 +75,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     
-    - name: Deploy Content to Azure Sentinel
+    - name: Deploy Content to Microsoft Sentinel
       uses: azure/powershell@v1
       with:
         azPSVersion: 'latest'
