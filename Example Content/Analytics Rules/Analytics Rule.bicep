@@ -4,7 +4,7 @@ resource workspace_Microsoft_SecurityInsights_ed27aa54_2adc_4774_ae30_6f84a1de02
   name: '${workspace}/Microsoft.SecurityInsights/ed27aa54-2adc-4774-ae30-6f84a1de0215'
   kind: 'Scheduled'
   properties: {
-    displayName: 'Bicep Analytic Rule 1 - testing smart tracking'
+    displayName: 'Bicep Analytic Rule 1 - test smart tracking'
     description: 'DESCRIPTION CHECK'
     severity: 'High'
     enabled: true
