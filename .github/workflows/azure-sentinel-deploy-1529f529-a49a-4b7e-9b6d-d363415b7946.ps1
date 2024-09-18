@@ -121,7 +121,7 @@ function GetCommitShaTable($getTreeResponse) {
     $shaTable = @{}
     $getTreeResponse.tree | ForEach-Object {
         $truePath = AbsolutePathWithSlash $_.path
-        if (([System.IO.Path]::GetExtension($_.path) -eq ".json") -or ($truePath -eq $configPath))
+        if ((([System.IO.Path]::GetExtension($_.path) -eq ".json") -or ([System.IO.Path]::GetExtension($_.path) -eq ".bicep")) -or ($truePath -eq $configPath))
         {
             $shaTable.Add($truePath, $_.sha)
         }
