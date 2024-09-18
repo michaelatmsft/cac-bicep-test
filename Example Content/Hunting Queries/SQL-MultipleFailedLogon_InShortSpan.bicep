@@ -6,7 +6,7 @@ resource workspace_SQL_MultipleFailedLogon_InShortSpan 'Microsoft.OperationalIns
   location: resourceGroup().location
   properties: {
     eTag: '*'
-    displayName: 'Multiple Failed Logon on SQL Server in Short time Span'
+    displayName: 'Bicep - Multiple Failed Logon on SQL Server in Short time Span'
     category: 'Hunting Queries'
     query: '\n// SQLEvent is not the table name, it is the function name that should already be imported into your workspace.\n// The underlying table where the data exists is the Event table.\n// the threshold can be changed below as per requirement\n//\nlet failedThreshold = 3;\nSQLEvent\n| where LogonResult has "failed"\n| summarize StartTime = min(TimeGenerated), EndTime = max(TimeGenerated), TotalFailedLogons = count() by CurrentUser, ClientIP\n| where TotalFailedLogons >= failedThreshold\n| project StartTime, CurrentUser, TotalFailedLogons, ClientIP\n| extend timestamp = StartTime, AccountCustomEntity = CurrentUser, IPCustomEntity = ClientIP\n'
     version: 1

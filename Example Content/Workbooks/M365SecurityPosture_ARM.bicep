@@ -9,7 +9,7 @@ param workbook_id string = '7fe911c3-2619-42a9-8395-28cca5b3a9f1'
 
 @description('Name for the workbook')
 @minLength(1)
-param workbook_name string = 'M365SecurityPosture'
+param workbook_name string = 'Bicep - M365SecurityPosture'
 
 resource workbook_id_resource 'Microsoft.Insights/workbooks@2020-02-12' = {
   name: workbook_id

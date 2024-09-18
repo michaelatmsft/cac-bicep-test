@@ -4,7 +4,7 @@ resource workspace_Microsoft_SecurityInsights_85f2eac9_43f1_480e_b8ad_473375c195
   name: '${workspace}/Microsoft.SecurityInsights/85f2eac9-43f1-480e-b8ad-473375c195c0'
   kind: 'Scheduled'
   properties: {
-    displayName: 'Repositories automation rule 1'
+    displayName: 'Bicep automation rule 1'
     order: 1
     triggeringLogic: {
       isEnabled: true
