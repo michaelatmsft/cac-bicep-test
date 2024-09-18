@@ -1,7 +1,7 @@
 param workspace string
 
 resource workspace_Microsoft_SecurityInsights_ed27aa54_2adc_4774_ae30_6f84a1de0213 'Microsoft.OperationalInsights/workspaces/providers/alertRules@2021-03-01-preview' = {
-  name: '${workspace}/Microsoft.SecurityInsights/ed27aa54-2adc-4774-ae30-6f84a1de0213'
+  name: '${workspace}/Microsoft.SecurityInsights/ed27aa54-2adc-4774-ae30-6f84a1de0215'
   kind: 'Scheduled'
   properties: {
     displayName: 'Bicep Analytic Rule 1'
