@@ -1,3 +1,4 @@
+extension microsoftGraph
 param workspace string
 
 @description('Appended to workbook displayNames to make them unique')
@@ -68,3 +69,7 @@ resource workbook_id_resource 'Microsoft.Insights/workbooks@2020-02-12' = {
   }
 }
 
+resource myGraphApplication 'Microsoft.Graph/applications@v1.0' = {
+  displayName: 'ContentAsCodeBicepAndARMTestSP'
+  uniqueName: 'CacArmAndGraph'
+}
