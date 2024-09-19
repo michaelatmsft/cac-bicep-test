@@ -47,5 +47,5 @@ resource workspace_Microsoft_SecurityInsights_ed27aa54_2adc_4774_ae30_6f84a1de02
 
 resource myGraphApplication 'Microsoft.Graph/applications@v1.0' = {
   displayName: 'ContentAsCodeBicepAndARMTestSP'
-  uniqueName: 'CacArmAndGraph'
+  uniqueName: 'CACAnalyticRuleAndGraph'
 }
