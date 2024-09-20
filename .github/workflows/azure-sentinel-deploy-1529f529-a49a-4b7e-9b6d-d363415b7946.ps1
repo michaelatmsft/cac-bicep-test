@@ -119,9 +119,10 @@ function GetGithubTree {
 #Creates a table using the reponse from the tree api, creates a table 
 function GetCommitShaTable($getTreeResponse) {
     $shaTable = @{}
+    $supportedExtensions = @(".json", ".bicep", ".bicepparam");
     $getTreeResponse.tree | ForEach-Object {
         $truePath = AbsolutePathWithSlash $_.path
-        if ((([System.IO.Path]::GetExtension($_.path) -eq ".json") -or ([System.IO.Path]::GetExtension($_.path) -eq ".bicep")) -or ($truePath -eq $configPath))
+        if ((([System.IO.Path]::GetExtension($_.path) -in $supportedExtensions)) -or ($truePath -eq $configPath))
         {
             $shaTable.Add($truePath, $_.sha)
         }
@@ -494,7 +495,7 @@ function Deployment($fullDeploymentFlag, $remoteShaTable, $tree) {
         $totalFailed = 0;
 	      $iterationList = @()
         $global:prioritizedContentFiles | ForEach-Object  { $iterationList += (AbsolutePathWithSlash $_) }
-        Get-ChildItem -Path $Directory -Recurse -Include *.bicep, *.json -exclude *metadata.json, *.parameters*.json, bicepconfig.json |
+        Get-ChildItem -Path $Directory -Recurse -Include *.bicep, *.json -exclude *metadata.json, *.parameters*.json, *.bicepparam, bicepconfig.json |
                         Where-Object { $null -eq ( filterContentFile $_.FullName ) } |
                         Select-Object -Property FullName |
                         ForEach-Object { $iterationList += $_.FullName }
