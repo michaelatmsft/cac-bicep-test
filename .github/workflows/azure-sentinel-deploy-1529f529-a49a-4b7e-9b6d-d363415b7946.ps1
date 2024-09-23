@@ -436,7 +436,7 @@ function LoadDeploymentConfig() {
 
 function filterContentFile($fullPath) {
 	$temp = RelativePathWithBackslash $fullPath
-	return $global:excludeContentFiles | ? {$temp.StartsWith($_, 'CurrentCultureIgnoreCase')}
+	return $global:excludeContentFiles | Where-Object {$temp.StartsWith($_, 'CurrentCultureIgnoreCase')}
 }
 
 function RelativePathWithBackslash($absolutePath) {
@@ -450,7 +450,7 @@ function AbsolutePathWithSlash($relativePath) {
 #resolve parameter file name, return $null if there is none.
 function GetParameterFile($path) {
     $index = RelativePathWithBackslash $path
-    $key = ($global:parameterFileMapping.Keys | ? { $_ -eq $index })
+    $key = ($global:parameterFileMapping.Keys | Where-Object { $_ -eq $index })
     if ($key) {
         $mappedParameterFile = AbsolutePathWithSlash $global:parameterFileMapping[$key]
         if (Test-Path $mappedParameterFile) {
@@ -458,18 +458,30 @@ function GetParameterFile($path) {
         }
     }
 
-    $parameterFilePrefix = $path.TrimEnd(".json")
-    
-    $workspaceParameterFile = $parameterFilePrefix + ".parameters-$WorkspaceId.json"
-    if (Test-Path $workspaceParameterFile) {
-        return $workspaceParameterFile
+    $extension = [System.IO.Path]::GetExtension($path)
+    $parameterFilePrefix = if ($extension -eq ".json") {
+        $extension = ".parameters.json"
+        $path.TrimEnd(".json")
+    } elseif ($extension -eq ".bicep") {
+        $extension = ".bicepparam"
+        $path.TrimEnd(".bicep")
+    } else {
+        return $null
     }
     
-    $defaultParameterFile = $parameterFilePrefix + ".parameters.json"
+    # Check for workspace-specific parameter file
+    if ($extension -eq ".parameters.json") {
+        $workspaceParameterFile = $parameterFilePrefix + ".parameters-$WorkspaceId" + $extension
+        if (Test-Path $workspaceParameterFile) {
+            return $workspaceParameterFile
+        }
+    }
+
+    $defaultParameterFile = $parameterFilePrefix + $extension
     if (Test-Path $defaultParameterFile) {
         return $defaultParameterFile
     }
-    
+
     return $null
 }
 
