@@ -1,11 +1,10 @@
 FileName, CommitSha
-Example Content/Playbooks/Send-email-with-formatted-incident-report.json,5fd65b89718da6e276b27ca38d925bd2a2475a61
-Example Content/Playbooks/Send-email-with-formatted-incident-report.bicep,291b864cbe6374cbeae5f953476eb85c3c180d92
-Example Content/Joint Functionality/Analytics and Automation Rule.bicep,c6a9a971c331f57de93716ea67a3b720ebffc78d
-Example Content/Automation Rules/SampleAutomationRule.bicep,5dd8ad59fc75c7bdcae405cdeb5a3f9532ca4782
-Example Content/Hunting Queries/Unusual Number of Repository Clones.bicep,93e001fea37874bc522f01872466e618eea3b29c
+Example Content/Analytics Rules/Analytics Rule.bicep,3cae282dd1af9c113a070603e2ad16e0bb58a05e
 Example Content/Workbooks/M365SecurityPosture_ARM.bicep,c7de100215f2c5b11338544a197fd9634c6be9de
+Example Content/Automation Rules/SampleAutomationRule.bicep,5dd8ad59fc75c7bdcae405cdeb5a3f9532ca4782
+Example Content/Playbooks/Send-email-with-formatted-incident-report.json,5fd65b89718da6e276b27ca38d925bd2a2475a61
 Example Content/Hunting Queries/Bicep and arm param/SQL-MultipleFailedLogon_InShortSpan.bicep,99c40727564915dd1eb4a2e3c485b30aff15f9d7
 Example Content/Parsers/ProcessEventMicrosoftSysmonTerminate.bicep,ae24f3869b9051214f632569edbf12eff37bc249
-Example Content/Analytics Rules/Analytics Rule.bicep,3cae282dd1af9c113a070603e2ad16e0bb58a05e
+Example Content/Playbooks/Send-email-with-formatted-incident-report.bicep,291b864cbe6374cbeae5f953476eb85c3c180d92
+Example Content/Joint Functionality/Analytics and Automation Rule.bicep,c6a9a971c331f57de93716ea67a3b720ebffc78d
 
