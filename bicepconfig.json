@@ -10,7 +10,7 @@
       }
     }
   },
-  "experimentalFeaturesEnabled": {
-    "extensibility": true
-  }
+//  "experimentalFeaturesEnabled": {
+//    "extensibility": true
+//  }
 }
