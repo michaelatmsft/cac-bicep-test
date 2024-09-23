@@ -13,7 +13,6 @@ $contentTypeMapping = @{
     "Parser"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
     "Playbook"=@("Microsoft.Web/connections", "Microsoft.Logic/workflows", "Microsoft.Web/customApis");
     "Workbook"=@("Microsoft.Insights/workbooks");
-    "BicepResource"=@("Microsoft.Graph/applications@v1.0"); # This would eventually be something such as a Custom detection rule
 }
 $sourceControlId = $Env:sourceControlId 
 $rootDirectory = $Env:rootDirectory
@@ -39,7 +38,6 @@ $sentinelResourcePatterns = @{
     "Parser" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.OperationalInsights/workspaces/$namePattern/savedSearches/$namePattern"
     "Playbook" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.Logic/workflows/$namePattern"
     "Workbook" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.Insights/workbooks/$namePattern"
-    # "BicepTest" = "/subscriptions/$guidPattern/resourceGroups/$namePattern/providers/Microsoft.OperationalInsights/workspaces/$namePattern/providers/Microsoft.SecurityInsights/alertRules/$namePattern"
 }
 
 if ([string]::IsNullOrEmpty($contentTypes)) {
@@ -315,15 +313,7 @@ function IsRetryable($deploymentName) {
     }
 }
 
-function IsValidResourceType($template, $isBicepResource = $false) {
-    if ($isBicepResource) {
-        return IsValidBicepResourceType $template
-    } else {
-        return IsValidArmResourceType $template
-    }
-}
-
-function IsValidArmResourceType($template) {
+function IsValidResourceType($template) {
     try {
         $isAllowedResources = $true
         $template.resources | ForEach-Object { 
@@ -335,10 +325,6 @@ function IsValidArmResourceType($template) {
         $isAllowedResources = $false
     }
     return $isAllowedResources
-}
-
-function IsValidBicepResourceType($template) {
-    return $true # Implement later
 }
 
 function DoesContainWorkspaceParam($templateObject) {
@@ -450,7 +436,7 @@ function LoadDeploymentConfig() {
 
 function filterContentFile($fullPath) {
 	$temp = RelativePathWithBackslash $fullPath
-	return $global:excludeContentFiles | ? {$temp.StartsWith($_, 'CurrentCultureIgnoreCase')}
+	return $global:excludeContentFiles | Where-Object {$temp.StartsWith($_, 'CurrentCultureIgnoreCase')}
 }
 
 function RelativePathWithBackslash($absolutePath) {
@@ -464,7 +450,7 @@ function AbsolutePathWithSlash($relativePath) {
 #resolve parameter file name, return $null if there is none.
 function GetParameterFile($path) {
     $index = RelativePathWithBackslash $path
-    $key = ($global:parameterFileMapping.Keys | ? { $_ -eq $index })
+    $key = ($global:parameterFileMapping.Keys | Where-Object { $_ -eq $index })
     if ($key) {
         $mappedParameterFile = AbsolutePathWithSlash $global:parameterFileMapping[$key]
         if (Test-Path $mappedParameterFile) {
@@ -472,18 +458,30 @@ function GetParameterFile($path) {
         }
     }
 
-    $parameterFilePrefix = $path.TrimEnd(".json")
-    
-    $workspaceParameterFile = $parameterFilePrefix + ".parameters-$WorkspaceId.json"
-    if (Test-Path $workspaceParameterFile) {
-        return $workspaceParameterFile
+    $extension = [System.IO.Path]::GetExtension($path)
+    $parameterFilePrefix = if ($extension -eq ".json") {
+        $extension = ".parameters.json"
+        $path.TrimEnd(".json")
+    } elseif ($extension -eq ".bicep") {
+        $extension = ".bicepparam"
+        $path.TrimEnd(".bicep")
+    } else {
+        return $null
     }
     
-    $defaultParameterFile = $parameterFilePrefix + ".parameters.json"
+    # Check for workspace-specific parameter file
+    if ($extension -eq ".parameters.json") {
+        $workspaceParameterFile = $parameterFilePrefix + ".parameters-$WorkspaceId" + $extension
+        if (Test-Path $workspaceParameterFile) {
+            return $workspaceParameterFile
+        }
+    }
+
+    $defaultParameterFile = $parameterFilePrefix + $extension
     if (Test-Path $defaultParameterFile) {
         return $defaultParameterFile
     }
-    
+
     return $null
 }
 
@@ -506,16 +504,14 @@ function Deployment($fullDeploymentFlag, $remoteShaTable, $tree) {
                 Write-Host "[Warning] Skipping deployment for $path. The file doesn't exist."
                 return
             }
-
-            $isBicep = $false
+            
             if ($path -like "*.bicep") {
                 $templateObject = bicep build $path --stdout | Out-String | ConvertFrom-Json
-                $isBicep = $true
             } else {
                 $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
             }
 
-            if (-not (IsValidResourceType $templateObject $isBicep))
+            if (-not (IsValidResourceType $templateObject))
             {
                 Write-Host "[Warning] Skipping deployment for $path. The file contains resources for content that was not selected for deployment. Please add content type to connection if you want this file to be deployed."
                 return
