@@ -285,13 +285,22 @@ function ToContentKind($contentKinds, $resource, $templateObject) {
     return $null
 }
 
-function IsValidTemplate($path, $templateObject) {
+function IsValidTemplate($path, $templateObject, $parameterFile) {
     Try {
         if (DoesContainWorkspaceParam $templateObject) {
-            Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path -workspace $WorkspaceName
+            if ($parameterFile) {
+                Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path -TemplateParameterFile $parameterFile -workspace $WorkspaceName
+            }
+            else {
+                Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path -workspace $WorkspaceName
+            }
         }
         else {
-            Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path
+            if ($parameterFile) {
+                Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path -TemplateParameterFile $parameterFile
+            } else {
+                Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $path
+            }
         }
 
         return $true
@@ -334,7 +343,7 @@ function DoesContainWorkspaceParam($templateObject) {
 function AttemptDeployment($path, $parameterFile, $deploymentName, $templateObject) {
     Write-Host "[Info] Deploying $path with deployment name $deploymentName"
 
-    $isValid = IsValidTemplate $path $templateObject
+    $isValid = IsValidTemplate $path $templateObject $parameterFile
     if (-not $isValid) {
         return $false
     }
