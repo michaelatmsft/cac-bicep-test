@@ -35,7 +35,7 @@ resource workspace_Microsoft_SecurityInsights_85f2eac9_43f1_480e_b8ad_473375c195
           classificationComment: null
           owner: {
             objectId: 'b18ef471-be11-439d-9279-5ce4e18b976e'
-            email: 'SampleEmail@Contoso.com'
+            email: 'SampleEmail1@Contoso.com'
             assignedTo: null
             userPrincipalName: 'SampleUser@Contoso.com'
           }
