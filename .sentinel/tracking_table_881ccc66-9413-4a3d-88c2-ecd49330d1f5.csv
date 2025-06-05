@@ -1,0 +1,6 @@
+FileName, CommitSha
+Example Content/Tests/Params/SQL-MultipleFailedLogon_InShortSpan.bicep,5fb07e78814b6cd5cd8df89400205501a4841e50
+Example Content/Hunting Queries/Bicep and arm param/SQL-MultipleFailedLogon_InShortSpan.bicep,99c40727564915dd1eb4a2e3c485b30aff15f9d7
+Example Content/Tests/Params/SQL-MultipleFailedLogon_InShortSpan.bicepparam,1e7316423d950fa8ea18454ef12ea37e40022dd5
+Example Content/Parsers/ProcessEventMicrosoftSysmonTerminate.bicep,ae24f3869b9051214f632569edbf12eff37bc249
+
